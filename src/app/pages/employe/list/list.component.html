@@ -1,0 +1,95 @@
+<app-breadcrumbs title="Pages" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="container mt-4">
+    <button class="btn btn-primary mb-3" (click)="openAddModal(addEditModal)">+ Ajouter un Employé</button>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Matricule</th>
+            <th>Téléphone</th>
+            <th>Âge</th>
+            <th>Service</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let emp of employes">
+            <td>{{ emp.nom }}</td>
+            <td>{{ emp.prenom }}</td>
+            <td>{{ emp.matricule }}</td>
+            <td>{{ emp.telephone }}</td>
+            <td>{{ emp.age }}</td>
+            <td>{{ emp.serviceId }}</td>
+            <td>
+                <button class="btn btn-success btn-sm me-1" (click)="openEditModal(addEditModal, emp)">Modifier</button>
+                <button class="btn btn-danger btn-sm" (click)="openDeleteModal(deleteModal, emp)">Supprimer</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Modal Ajout/Modification -->
+    <ng-template #addEditModal let-modal>
+        <form [formGroup]="employeForm" (ngSubmit)="saveEmploye()">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{ selectedEmploye ? 'Modifier Employé' : 'Ajouter un Employé' }}
+                </h5>
+                <button type="button" class="btn-close" (click)="modal.close()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-2">
+                    <label>Nom</label>
+                    <input type="text" class="form-control" formControlName="nom" />
+                </div>
+                <div class="mb-2">
+                    <label>Prénom</label>
+                    <input type="text" class="form-control" formControlName="prenom" />
+                </div>
+                <div class="mb-2">
+                    <label>Matricule</label>
+                    <input type="text" class="form-control" formControlName="matricule" />
+                </div>
+                <div class="mb-2">
+                    <label>Téléphone</label>
+                    <input type="text" class="form-control" formControlName="telephone" />
+                </div>
+                <div class="mb-2">
+                    <label>Âge</label>
+                    <input type="number" class="form-control" formControlName="age" />
+                </div>
+                <div class="mb-2">
+                    <label>Service</label>
+                    <input type="number" class="form-control" formControlName="idService" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="modal.close()">Annuler</button>
+                <button type="submit" class="btn btn-success" [disabled]="employeForm.invalid">
+                    {{ selectedEmploye ? 'Modifier' : 'Ajouter' }}
+                </button>
+            </div>
+        </form>
+    </ng-template>
+
+    <!-- Modal Suppression -->
+    <ng-template #deleteModal let-modal>
+        <div class="modal-header">
+            <h5 class="modal-title">Confirmer la suppression</h5>
+            <button type="button" class="btn-close" (click)="modal.close()"></button>
+        </div>
+        <div class="modal-body">
+            <p>
+                Voulez-vous vraiment supprimer
+                <strong>{{ selectedEmploye?.nom }} {{ selectedEmploye?.prenom }}</strong>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="modal.close()">Annuler</button>
+            <button class="btn btn-danger" (click)="deleteEmploye()">Supprimer</button>
+        </div>
+    </ng-template>
+</div>
